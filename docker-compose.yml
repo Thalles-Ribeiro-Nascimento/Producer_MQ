@@ -12,31 +12,19 @@ services:
         environment:
             - RABBITMQ_DEFAULT_USER=admin
             - RABBITMQ_DEFAULT_PASS=admin123
-
-    sonarqube:
-        image: sonarqube:community
-        container_name: sonarqube
+            
+    db:
+        image: mysql/mysql-server:latest
+        container_name: my-mysql
+        restart: always
+        environment:
+          - MYSQL_DATABASE=root
+          - MYSQL_ROOT_PASSWORD=
         ports:
-          - "9000:9000"
-        environment:
-          SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
-          SONAR_JDBC_URL: jdbc:postgresql://postgres-sonar:5432/sonarqube
-          SONAR_JDBC_USERNAME: admin
-          SONAR_JDBC_PASSWORD: Senac@123456
-        depends_on:
-          - postgres-sonar
-        restart: always
-
-    postgres-sonar:
-        image: postgres:14
-        container_name: postgres-sonar
-        environment:
-          POSTGRES_USER: admin
-          POSTGRES_PASSWORD: Senac@123456
-          POSTGRES_DB: sonarqube
+          - '11000:11000'
         volumes:
-          - postgres_sonar_data:/var/lib/postgresql/data
-        restart: always
-
+          - mysql-volume:/var/lib/mysql
 volumes:
-  postgres_sonar_data:
+  mysql-volume:
+    driver: local
+
