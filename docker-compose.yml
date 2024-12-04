@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: rabbitmq
+        restart: always
+        ports:
+            - 1157:1157
+        volumes:
+            - ./dados:/var/lib/rabbitmq/
+        environment:
+            - RABBITMQ_DEFAULT_USER=admin
+            - RABBITMQ_DEFAULT_PASS=admin123
+
+    sonarqube:
+        image: sonarqube:community
+        container_name: sonarqube
+        ports:
+          - "9000:9000"
+        environment:
+          SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+          SONAR_JDBC_URL: jdbc:postgresql://postgres-sonar:5432/sonarqube
+          SONAR_JDBC_USERNAME: admin
+          SONAR_JDBC_PASSWORD: Senac@123456
+        depends_on:
+          - postgres-sonar
+        restart: always
+
+    postgres-sonar:
+        image: postgres:14
+        container_name: postgres-sonar
+        environment:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: Senac@123456
+          POSTGRES_DB: sonarqube
+        volumes:
+          - postgres_sonar_data:/var/lib/postgresql/data
+        restart: always
+
+volumes:
+  postgres_sonar_data:
