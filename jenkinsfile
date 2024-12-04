@@ -10,10 +10,10 @@ pipeline {
         stage('Instalar Dependências') {
             steps {
                 script {
-                    // Atualiza o PATH se necessário
-                    env.PATH = "/usr/bin:$PATH"
-                    // Instalar as dependências Maven antes de compilar o projeto
-                    bat 'mvn clean install'  // Instala as dependências do Maven
+                    // Usar Maven instalado no Jenkins
+                    def mvnHome = tool name: 'Maven 3', type: 'Maven'
+                    withEnv(["MAVEN_HOME=${mvnHome}", "PATH+MAVEN=${mvnHome}/bin"]) {
+                    bat 'mvn clean install'
                 }
             }
         }
