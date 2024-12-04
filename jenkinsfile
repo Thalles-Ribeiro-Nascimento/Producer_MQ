@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     def appName = 'producer'
-                    def imageTag = "${appName}:${env.BUILD_ID}"
+                    def imageTag = "${appName}:ms-prova"
 
                     // Construir a imagem Docker
                     bat "docker build -t ${imageTag} ."
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     def appName = 'producer'
-                    def imageTag = "${appName}:${env.BUILD_ID}"
+                    def imageTag = "${appName}:ms-prova"
                     // Parar e remover o container existente, se houver
                     // sh "docker stop ${appName} || true"
                     // sh "docker rm ${appName} || true"
